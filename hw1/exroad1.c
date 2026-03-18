@@ -4,8 +4,8 @@
 
 // gcc exroad1.c -o exroad1
 // ./exroad1
-void mping (int **map, int *rownum, int *colnum, int *currentrow, int *currentcol, int *endrow, int *endcol);
-void mping (int **map, int *rownum, int *colnum, int *currentrow, int *currentcol, int *endrow, int *endcol)
+void mping (int **map, int *rownum, int *colnum, int *currentrow, int *currentcol, int *endrow, int *endcol, int *count);
+void mping (int **map, int *rownum, int *colnum, int *currentrow, int *currentcol, int *endrow, int *endcol, int *count)
     {
         
        
@@ -22,9 +22,30 @@ void mping (int **map, int *rownum, int *colnum, int *currentrow, int *currentco
         printf("현재 좌표(%d, %d)\n", *currentrow, *currentcol);
         printf("목적지 좌표(%d, %d)\n", *endrow, *endcol);
         printf("미로의 크기 (%d x %d)\n", *rownum, *colnum);
-        if (*currentrow < *endrow || *currentcol < *endcol){
-            
+        if (map[*currentrow+1][*currentcol] == 1 && map[*currentrow][*currentcol+1] == 1){
+            printf("양쪽길 모두 존재");
+            mping(map, rownum, colnum, currentrow, currentcol, endrow, endcol);
         }
+        if (map[*currentrow+1][*currentcol] == 1){
+            printf("아래길 존재");
+            (*currentrow)++;
+            mping(map, rownum, colnum, currentrow, currentcol, endrow, endcol);
+        }
+        if (map[*currentrow][*currentcol+1] == 1){
+            printf("오른쪽길 존재");
+            (*currentcol)++;
+            mping(map, rownum, colnum, currentrow, currentcol, endrow, endcol);
+        }
+        else{
+            printf("길이 없습니다.");
+            if (*currentrow == *endrow && *currentcol == *endcol)
+            {
+                printf("탈출했습니다.\n");
+                printf("탈출한 경우의 수는 %d입니다.\n", *count);
+                return;
+            }
+        }
+
         // switch(map[*currentrow+1][*currentcol])
         //     {
         //         case 0:
@@ -97,7 +118,7 @@ int main()
     int currentrow = startrow, currentcol = startcol;
     int count = 0;
    
-    mping(map,&rownum, &colnum,&currentrow, &currentcol, &endrow, &endcol);
+    mping(map,&rownum, &colnum,&currentrow, &currentcol, &endrow, &endcol, &count);
     //printf("탈출한 경우의 수는 %d입니다.\n", count);
 
 
